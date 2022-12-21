@@ -67,9 +67,9 @@ async def load_ref(message: types.Message, state: FSMContext):
         ),
         parse_mode=ParseMode.MARKDOWN,
     )
-    await bot.answer('Справка будет готова в течении 3-х рабочих дней. Забрать её можно будет в n кабинете')
+    await message.answer('Справка будет готова в течении 3-х рабочих дней. Забрать её можно будет в n кабинете')
     chat_id = message.chat.id
-    admin_id = 920986648
+    admin_id = 969075792
     button_url = f'tg://openmessage?user_id={chat_id}'
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton(text='Профиль', url=button_url))
