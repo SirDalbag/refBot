@@ -3,7 +3,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ParseMode
-from temp import dp, bot
+from temp import bot
 from keyboards import kb_client
 
 import aiogram.utils.markdown as md
@@ -14,6 +14,7 @@ class RefForm(StatesGroup):
     group = State()
     phoneNum = State()
     ref = State()
+
 
 async def command_start(message: types.Message):
     await message.answer('Для получения справки нажмите на кнопку или же напишите команду /ref\n\nВнимание! Ошибки допущенные при заполнении данных будут у Вас в справке!\n\nДля отмены нажмите на кнопку или же напишите команду /cancel\n\nСправка будет готова в течении 3-х рабочих дней. Забрать её можно будет в n кабинете', reply_markup=kb_client)
@@ -56,6 +57,7 @@ async def load_phoneNum(message: types.Message, state: FSMContext):
 async def load_ref(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['ref'] = message.text
+    chat_id = message.chat.id
     await bot.send_message(
         message.chat.id,
         md.text(
@@ -63,23 +65,27 @@ async def load_ref(message: types.Message, state: FSMContext):
             md.text('Группа:', data['group']),
             md.text('Номер телефона:', data['phoneNum']),
             md.text('Справка:', data['ref']),
-            sep='\n',
+            sep='\n'
         ),
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN
     )
     await message.answer('Справка будет готова в течении 3-х рабочих дней. Забрать её можно будет в n кабинете')
-    chat_id = message.chat.id
     admin_id = 969075792
     button_url = f'tg://openmessage?user_id={chat_id}'
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton(text='Профиль', url=button_url))
     await bot.send_message(admin_id, text=md.text(
-            md.text('Имя студента:', data['name']),
-            md.text('Группа:', data['group']),
-            md.text('Номер телефона:', data['phoneNum']),
-            md.text('Справка:', data['ref']),
-            sep='\n',
-        ), reply_markup=markup)
+        md.text('Имя студента:', data['name']),
+        md.text('Группа:', data['group']),
+        md.text('Номер телефона:', data['phoneNum']),
+        md.text('Справка:', data['ref']),
+        md.text('ID:', md.code(chat_id)),
+        md.text('\nДля отправки сообщения студенту о готовой справке напишите команду /final'),
+        sep='\n'
+    ),
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
+    )
     await state.finish()
 
 
