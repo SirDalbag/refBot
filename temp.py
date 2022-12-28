@@ -9,4 +9,4 @@ storage = MemoryStorage()
 bot = Bot(token=os.getenv('TOKEN'))
 dp = Dispatcher(bot, storage=storage)
 
-https://www.canva.com/design/DAFVvppqQJc/rGmO5ywXmgr991ITjbrCKg/view?utm_content=DAFVvppqQJc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+5736707601:AAETz_J4HcpfbhfFCQvIPS8Psh869OWq4js
